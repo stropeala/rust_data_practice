@@ -1,9 +1,352 @@
 {
   "1": {
-    "surname": "salut",
-    "name": "sunt",
-    "telephone_number": "un",
-    "city": "test",
+    "surname": "Ionescu",
+    "name": "Ana",
+    "telephone_number": "0722000001",
+    "city": "Bucuresti",
+    "pariah": false
+  },
+  "2": {
+    "surname": "Popescu",
+    "name": "Mihai",
+    "telephone_number": "0722000002",
+    "city": "Cluj-Napoca",
+    "pariah": false
+  },
+  "3": {
+    "surname": "Georgescu",
+    "name": "Elena",
+    "telephone_number": "0722000003",
+    "city": "Iasi",
+    "pariah": false
+  },
+  "4": {
+    "surname": "Radu",
+    "name": "Andrei",
+    "telephone_number": "0722000004",
+    "city": "Timisoara",
+    "pariah": false
+  },
+  "5": {
+    "surname": "Dumitru",
+    "name": "Maria",
+    "telephone_number": "0722000005",
+    "city": "Constanta",
+    "pariah": false
+  },
+  "6": {
+    "surname": "Stan",
+    "name": "Cristian",
+    "telephone_number": "0722000006",
+    "city": "Craiova",
+    "pariah": false
+  },
+  "7": {
+    "surname": "Stoica",
+    "name": "Ioana",
+    "telephone_number": "0722000007",
+    "city": "Brasov",
+    "pariah": false
+  },
+  "8": {
+    "surname": "Gheorghe",
+    "name": "Alexandru",
+    "telephone_number": "0722000008",
+    "city": "Galati",
+    "pariah": false
+  },
+  "9": {
+    "surname": "Matei",
+    "name": "Gabriela",
+    "telephone_number": "0722000009",
+    "city": "Ploiesti",
+    "pariah": false
+  },
+  "10": {
+    "surname": "Constantin",
+    "name": "Vlad",
+    "telephone_number": "0722000010",
+    "city": "Oradea",
+    "pariah": false
+  },
+  "11": {
+    "surname": "Marin",
+    "name": "Diana",
+    "telephone_number": "0722000011",
+    "city": "Braila",
+    "pariah": false
+  },
+  "12": {
+    "surname": "Tudor",
+    "name": "Razvan",
+    "telephone_number": "0722000012",
+    "city": "Arad",
+    "pariah": false
+  },
+  "13": {
+    "surname": "Barbu",
+    "name": "Simona",
+    "telephone_number": "0722000013",
+    "city": "Pitesti",
+    "pariah": false
+  },
+  "14": {
+    "surname": "Nistor",
+    "name": "Bogdan",
+    "telephone_number": "0722000014",
+    "city": "Sibiu",
+    "pariah": false
+  },
+  "15": {
+    "surname": "Florea",
+    "name": "Roxana",
+    "telephone_number": "0722000015",
+    "city": "Bacau",
+    "pariah": false
+  },
+  "16": {
+    "surname": "Dobre",
+    "name": "Catalin",
+    "telephone_number": "0722000016",
+    "city": "Targu Mures",
+    "pariah": false
+  },
+  "17": {
+    "surname": "Serban",
+    "name": "Larisa",
+    "telephone_number": "0722000017",
+    "city": "Baia Mare",
+    "pariah": false
+  },
+  "18": {
+    "surname": "Iancu",
+    "name": "Sorin",
+    "telephone_number": "0722000018",
+    "city": "Buzau",
+    "pariah": false
+  },
+  "19": {
+    "surname": "Voicu",
+    "name": "Alina",
+    "telephone_number": "0722000019",
+    "city": "Botosani",
+    "pariah": false
+  },
+  "20": {
+    "surname": "Dinu",
+    "name": "Marius",
+    "telephone_number": "0722000020",
+    "city": "Satu Mare",
+    "pariah": false
+  },
+  "21": {
+    "surname": "Nedelcu",
+    "name": "Carmen",
+    "telephone_number": "0722000021",
+    "city": "Ramnicu Valcea",
+    "pariah": false
+  },
+  "22": {
+    "surname": "Preda",
+    "name": "Adrian",
+    "telephone_number": "0722000022",
+    "city": "Suceava",
+    "pariah": false
+  },
+  "23": {
+    "surname": "Ilie",
+    "name": "Monica",
+    "telephone_number": "0722000023",
+    "city": "Piatra Neamt",
+    "pariah": false
+  },
+  "24": {
+    "surname": "Petrescu",
+    "name": "Florin",
+    "telephone_number": "0722000024",
+    "city": "Drobeta-Turnu Severin",
+    "pariah": false
+  },
+  "25": {
+    "surname": "Enache",
+    "name": "Raluca",
+    "telephone_number": "0722000025",
+    "city": "Targoviste",
+    "pariah": false
+  },
+  "26": {
+    "surname": "Munteanu",
+    "name": "Daniel",
+    "telephone_number": "0722000026",
+    "city": "Focsani",
+    "pariah": false
+  },
+  "27": {
+    "surname": "Lupu",
+    "name": "Andreea",
+    "telephone_number": "0722000027",
+    "city": "Bistrita",
+    "pariah": false
+  },
+  "28": {
+    "surname": "Cristea",
+    "name": "Ovidiu",
+    "telephone_number": "0722000028",
+    "city": "Resita",
+    "pariah": false
+  },
+  "29": {
+    "surname": "Neagu",
+    "name": "Bianca",
+    "telephone_number": "0722000029",
+    "city": "Slatina",
+    "pariah": false
+  },
+  "30": {
+    "surname": "Toma",
+    "name": "George",
+    "telephone_number": "0722000030",
+    "city": "Calarasi",
+    "pariah": false
+  },
+  "31": {
+    "surname": "Sandu",
+    "name": "Nicoleta",
+    "telephone_number": "0722000031",
+    "city": "Alba Iulia",
+    "pariah": false
+  },
+  "32": {
+    "surname": "Mihai",
+    "name": "Ciprian",
+    "telephone_number": "0722000032",
+    "city": "Giurgiu",
+    "pariah": false
+  },
+  "33": {
+    "surname": "Ciobanu",
+    "name": "Denisa",
+    "telephone_number": "0722000033",
+    "city": "Deva",
+    "pariah": false
+  },
+  "34": {
+    "surname": "Vasile",
+    "name": "Iulian",
+    "telephone_number": "0722000034",
+    "city": "Hunedoara",
+    "pariah": false
+  },
+  "35": {
+    "surname": "Nicolae",
+    "name": "Oana",
+    "telephone_number": "0722000035",
+    "city": "Zalau",
+    "pariah": false
+  },
+  "36": {
+    "surname": "Diaconu",
+    "name": "Paul",
+    "telephone_number": "0722000036",
+    "city": "Sfantu Gheorghe",
+    "pariah": false
+  },
+  "37": {
+    "surname": "Anghel",
+    "name": "Teodora",
+    "telephone_number": "0722000037",
+    "city": "Barlad",
+    "pariah": false
+  },
+  "38": {
+    "surname": "Moldovan",
+    "name": "Sebastian",
+    "telephone_number": "0722000038",
+    "city": "Vaslui",
+    "pariah": false
+  },
+  "39": {
+    "surname": "Cojocaru",
+    "name": "Mihaela",
+    "telephone_number": "0722000039",
+    "city": "Roman",
+    "pariah": false
+  },
+  "40": {
+    "surname": "Manea",
+    "name": "Robert",
+    "telephone_number": "0722000040",
+    "city": "Turda",
+    "pariah": false
+  },
+  "41": {
+    "surname": "Iordache",
+    "name": "Cristina",
+    "telephone_number": "0722000041",
+    "city": "Medias",
+    "pariah": false
+  },
+  "42": {
+    "surname": "Balan",
+    "name": "Stefan",
+    "telephone_number": "0722000042",
+    "city": "Slobozia",
+    "pariah": false
+  },
+  "43": {
+    "surname": "Rusu",
+    "name": "Georgiana",
+    "telephone_number": "0722000043",
+    "city": "Alexandria",
+    "pariah": false
+  },
+  "44": {
+    "surname": "Popa",
+    "name": "Emanuel",
+    "telephone_number": "0722000044",
+    "city": "Voluntari",
+    "pariah": false
+  },
+  "45": {
+    "surname": "Ciobotaru",
+    "name": "Valentina",
+    "telephone_number": "0722000045",
+    "city": "Lugoj",
+    "pariah": false
+  },
+  "46": {
+    "surname": "Grigore",
+    "name": "Marian",
+    "telephone_number": "0722000046",
+    "city": "Medgidia",
+    "pariah": false
+  },
+  "47": {
+    "surname": "Albu",
+    "name": "Camelia",
+    "telephone_number": "0722000047",
+    "city": "Onesti",
+    "pariah": false
+  },
+  "48": {
+    "surname": "Pavel",
+    "name": "Cosmin",
+    "telephone_number": "0722000048",
+    "city": "Miercurea Ciuc",
+    "pariah": false
+  },
+  "49": {
+    "surname": "Dragomir",
+    "name": "Anca",
+    "telephone_number": "0722000049",
+    "city": "Sighetu Marmatiei",
+    "pariah": false
+  },
+  "50": {
+    "surname": "Vlad",
+    "name": "Horia",
+    "telephone_number": "0722000050",
+    "city": "Petrosani",
     "pariah": false
   }
 }

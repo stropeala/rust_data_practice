@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::env::var;
 use std::fs::{File, read_to_string, write};
 use std::path::{Path, PathBuf};
@@ -35,7 +35,7 @@ fn clients_file_path() -> Result<PathBuf, anyhow::Error> {
     Ok(PathBuf::from(data_dir).join("clients.json"))
 }
 
-fn read_clients(clients_file_path: &Path) -> Result<HashMap<usize, Client>, anyhow::Error> {
+fn read_clients(clients_file_path: &Path) -> Result<BTreeMap<usize, Client>, anyhow::Error> {
     if !clients_file_path.exists() {
         File::create(clients_file_path).context("Could not create Clients file!")?;
     }
@@ -43,7 +43,7 @@ fn read_clients(clients_file_path: &Path) -> Result<HashMap<usize, Client>, anyh
     let clients =
         read_to_string(clients_file_path).context("Could not read data from the Clients file!")?;
     if clients.trim().is_empty() {
-        return Ok(HashMap::new());
+        return Ok(BTreeMap::new());
     }
     Ok(from_str(&clients)?)
 }
