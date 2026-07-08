@@ -3,13 +3,14 @@ use std::env::var;
 use std::fs::{File, read_to_string, write};
 use std::path::{Path, PathBuf};
 
+use crate::time_parked::add_timer_to_clients;
 use anyhow::Context;
 use dotenvy::dotenv;
 use serde::{Deserialize, Serialize};
 use serde_json::{from_str, to_string_pretty};
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Client {
+pub struct Client {
     surname: String,
     name: String,
     telephone_number: String,
@@ -29,13 +30,13 @@ impl Client {
     }
 }
 
-fn clients_file_path() -> Result<PathBuf, anyhow::Error> {
+pub fn clients_file_path() -> Result<PathBuf, anyhow::Error> {
     dotenv().ok();
     let data_dir = var("DATA_DIR_PATH").context("Could not get Data directory path from env!")?;
     Ok(PathBuf::from(data_dir).join("clients.json"))
 }
 
-fn read_clients(clients_file_path: &Path) -> Result<BTreeMap<usize, Client>, anyhow::Error> {
+pub fn read_clients(clients_file_path: &Path) -> Result<BTreeMap<usize, Client>, anyhow::Error> {
     if !clients_file_path.exists() {
         File::create(clients_file_path).context("Could not create Clients file!")?;
     }
@@ -68,5 +69,6 @@ pub fn add_client(
 
     let json = to_string_pretty(&clients)?;
     write(clients_file, json)?;
+    add_timer_to_clients()?;
     Ok(())
 }
