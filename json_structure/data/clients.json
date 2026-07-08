@@ -1,20 +1,9 @@
-[
-  {
-    "1": {
-      "surname": "salut",
-      "name": "salut",
-      "telephone_number": "salut",
-      "city": "salut",
-      "pariah": false
-    }
-  },
-  {
-    "2": {
-      "surname": "salut2",
-      "name": "salut2",
-      "telephone_number": "salut2",
-      "city": "salut2",
-      "pariah": false
-    }
+{
+  "1": {
+    "surname": "salut",
+    "name": "sunt",
+    "telephone_number": "un",
+    "city": "test",
+    "pariah": false
   }
-]
+}
