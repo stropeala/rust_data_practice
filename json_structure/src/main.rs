@@ -9,8 +9,7 @@ use clients::add_client;
 use organizers::organizer;
 use timers::{add_entry_time, add_exit_time};
 
-fn main() -> Result<(), anyhow::Error> {
-    // Load environment once, up front, rather than on every file-path lookup.
+fn main() {
     dotenv().ok();
 
     let client_array = [
@@ -73,6 +72,4 @@ fn main() -> Result<(), anyhow::Error> {
     add_entry_time().expect("Could not add entry times!");
     add_exit_time().expect("Could not add exit times!");
     organizer().expect("Could not organize data!");
-
-    Ok(())
 }

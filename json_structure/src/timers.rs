@@ -25,9 +25,9 @@ pub struct Timer {
 fn rng_datetime_for_simulation() -> (i32, i32, i32, i32, i32) {
     let month = rng().random_range(1..13);
     let day = rng().random_range(1..29);
-    let hour = rng().random_range(1..24);
-    let minute = rng().random_range(1..60);
-    let second = rng().random_range(1..60);
+    let hour = rng().random_range(0..=24);
+    let minute = rng().random_range(0..60);
+    let second = rng().random_range(0..60);
     (month, day, hour, minute, second)
 }
 
