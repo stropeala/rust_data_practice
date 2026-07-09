@@ -1,37 +1,36 @@
 use std::collections::BTreeMap;
 use std::env::var;
-use std::fs::{File, write};
-use std::path::PathBuf;
+use std::fs::{File, read_to_string, write};
+use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 use anyhow::Context;
-use chrono::Local;
+use chrono::NaiveDateTime;
 use dotenvy::dotenv;
 use rand::{RngExt, rng};
 use serde::{Deserialize, Serialize};
-use serde_json::to_string_pretty;
+use serde_json::{from_str, to_string_pretty};
 
-use crate::clients::{clients_file_path, read_clients};
+use crate::clients::Client;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Timer {
-    entry_date: String,
-    exit_date: String,
+    entry_time: NaiveDateTime,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    exit_time: Option<NaiveDateTime>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    duration: Option<String>,
 }
 
-impl Timer {
-    fn new(entry_date: String, exit_date: String) -> Self {
-        Self {
-            entry_date,
-            exit_date,
-        }
-    }
-}
-
-fn timer() -> Duration {
-    let mut rng = rng();
-    let hours = rng.random_range(1..=72);
-    Duration::from_hours(hours)
+fn rng_datetime_for_simulation() -> (i32, i32, i32, i32, i32) {
+    let month = rng().random_range(1..13);
+    let day = rng().random_range(1..29);
+    let hour = rng().random_range(1..24);
+    let minute = rng().random_range(1..60);
+    let second = rng().random_range(1..60);
+    (month, day, hour, minute, second)
 }
 
 fn timers_file_path() -> Result<PathBuf, anyhow::Error> {
@@ -40,28 +39,53 @@ fn timers_file_path() -> Result<PathBuf, anyhow::Error> {
     Ok(PathBuf::from(data_dir).join("timers.json"))
 }
 
-pub fn add_timer_to_clients() -> Result<(), anyhow::Error> {
-    let clients_file = clients_file_path()?;
-    let clients = read_clients(&clients_file)?;
-    let clients_id: Vec<usize> = clients.keys().copied().collect();
+fn read_timers(timers_file_path: &Path) -> Result<BTreeMap<usize, Timer>, anyhow::Error> {
+    let timers = read_to_string(timers_file_path)?;
+    if timers.trim().is_empty() {
+        return Ok(BTreeMap::new());
+    }
+    Ok(from_str(&timers)?)
+}
 
+pub fn add_entry_time(clients: BTreeMap<usize, Client>) -> Result<(), anyhow::Error> {
     let timers_file = timers_file_path()?;
     if !timers_file.exists() {
-        File::create(&timers_file).context("Could not create Timers file")?;
+        File::create(&timers_file).context("Could not create Timers file!")?;
     }
 
-    /*
-     *
-     * TODO: add entry date when client is generated, then run the timer!
-     *
-     */
-
     let mut timers: BTreeMap<usize, Timer> = BTreeMap::new();
-    let entry_date = Local::now();
-    for client in clients_id {
-        let exit_date = entry_date + timer();
-        let timer = Timer::new(entry_date.to_string(), exit_date.to_string());
-        timers.insert(client, timer);
+    for client_id in clients.keys().copied() {
+        let (month, day, hour, minute, second) = rng_datetime_for_simulation();
+        let entry_time_string = format!("2026-{month}-{day} {hour}:{minute}:{second:02}");
+        let entry_time_format = "%Y-%m-%d %H:%M:%S";
+        let entry_time = NaiveDateTime::parse_from_str(&entry_time_string, entry_time_format)
+            .context("Could not get entry DateTime from string")?;
+        timers.insert(
+            client_id,
+            Timer {
+                entry_time,
+                exit_time: None,
+                duration: None,
+            },
+        );
+    }
+
+    let json = to_string_pretty(&timers)?;
+    write(timers_file, &json)?;
+    Ok(())
+}
+
+pub fn add_exit_time() -> Result<(), anyhow::Error> {
+    let timers_file = timers_file_path()?;
+    let mut timers = read_timers(&timers_file)?;
+
+    for timer in timers.values_mut() {
+        if timer.exit_time.is_some() {
+            continue;
+        }
+        let rng_hours_for_simulation = rng().random_range(1..73);
+        timer.duration = Some(format!("{rng_hours_for_simulation} hours"));
+        timer.exit_time = Some(timer.entry_time + Duration::from_hours(rng_hours_for_simulation));
     }
 
     let json = to_string_pretty(&timers)?;

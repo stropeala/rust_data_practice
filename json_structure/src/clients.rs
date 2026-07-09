@@ -3,11 +3,12 @@ use std::env::var;
 use std::fs::{File, read_to_string, write};
 use std::path::{Path, PathBuf};
 
-use crate::time_parked::add_timer_to_clients;
 use anyhow::Context;
 use dotenvy::dotenv;
 use serde::{Deserialize, Serialize};
 use serde_json::{from_str, to_string_pretty};
+
+use crate::time_parked::{add_entry_time, add_exit_time};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Client {
@@ -58,7 +59,7 @@ pub fn add_client(
     let clients_file = clients_file_path()?;
     let mut clients = read_clients(&clients_file)?;
 
-    let client_id = clients.keys().max().unwrap_or(&0);
+    let client_id = clients.keys().max().copied().unwrap_or(0);
     let client = Client::new(
         surname.to_string(),
         name.to_string(),
@@ -69,6 +70,7 @@ pub fn add_client(
 
     let json = to_string_pretty(&clients)?;
     write(clients_file, json)?;
-    add_timer_to_clients()?;
+    add_entry_time(clients)?;
+    add_exit_time()?;
     Ok(())
 }
