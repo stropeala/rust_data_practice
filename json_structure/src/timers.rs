@@ -14,14 +14,14 @@ use serde_json::{from_str, to_string_pretty};
 use crate::clients::Client;
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Timer {
+pub struct Timer {
     entry_time: NaiveDateTime,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     exit_time: Option<NaiveDateTime>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    duration: Option<String>,
+    pub duration: Option<String>,
 }
 
 fn rng_datetime_for_simulation() -> (i32, i32, i32, i32, i32) {
@@ -33,7 +33,7 @@ fn rng_datetime_for_simulation() -> (i32, i32, i32, i32, i32) {
     (month, day, hour, minute, second)
 }
 
-fn timers_file_path() -> Result<PathBuf, anyhow::Error> {
+pub fn timers_file_path() -> Result<PathBuf, anyhow::Error> {
     dotenv().ok();
     let data_dir =
         PathBuf::from(var("DATA_DIR_PATH").context("Could not get Data directory path from env!")?);
@@ -45,7 +45,7 @@ fn timers_file_path() -> Result<PathBuf, anyhow::Error> {
     Ok(data_dir.join("timers.json"))
 }
 
-fn read_timers(timers_file_path: &Path) -> Result<BTreeMap<usize, Timer>, anyhow::Error> {
+pub fn read_timers(timers_file_path: &Path) -> Result<BTreeMap<usize, Timer>, anyhow::Error> {
     let timers_string = read_to_string(timers_file_path).context("Could not read Timers file!")?;
     if timers_string.trim().is_empty() {
         return Ok(BTreeMap::new());

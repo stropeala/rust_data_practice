@@ -8,6 +8,7 @@ use dotenvy::dotenv;
 use serde::{Deserialize, Serialize};
 use serde_json::{from_str, to_string_pretty};
 
+use crate::organizers::organizer;
 use crate::timers::{add_entry_time, add_exit_time};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -81,5 +82,6 @@ pub fn add_client(
     write(clients_file, json).context("Could not write into Clients file!")?;
     add_entry_time(clients).context("Could not add Entry Time!")?;
     add_exit_time().context("Could not add Exit Time!")?;
+    organizer().context("Could not organize data!")?;
     Ok(())
 }
