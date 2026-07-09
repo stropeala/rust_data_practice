@@ -40,15 +40,17 @@ fn timers_file_path() -> Result<PathBuf, anyhow::Error> {
 }
 
 fn read_timers(timers_file_path: &Path) -> Result<BTreeMap<usize, Timer>, anyhow::Error> {
-    let timers = read_to_string(timers_file_path)?;
-    if timers.trim().is_empty() {
+    let timers_string = read_to_string(timers_file_path).context("Could not read Timers file!")?;
+    if timers_string.trim().is_empty() {
         return Ok(BTreeMap::new());
     }
-    Ok(from_str(&timers)?)
+
+    let timers = from_str(&timers_string).context("Could not deserialize from Timers string!")?;
+    Ok(timers)
 }
 
 pub fn add_entry_time(clients: BTreeMap<usize, Client>) -> Result<(), anyhow::Error> {
-    let timers_file = timers_file_path()?;
+    let timers_file = timers_file_path().context("Could not get Timers file!")?;
     if !timers_file.exists() {
         File::create(&timers_file).context("Could not create Timers file!")?;
     }
@@ -59,25 +61,23 @@ pub fn add_entry_time(clients: BTreeMap<usize, Client>) -> Result<(), anyhow::Er
         let entry_time_string = format!("2026-{month}-{day} {hour}:{minute}:{second:02}");
         let entry_time_format = "%Y-%m-%d %H:%M:%S";
         let entry_time = NaiveDateTime::parse_from_str(&entry_time_string, entry_time_format)
-            .context("Could not get entry DateTime from string")?;
-        timers.insert(
-            client_id,
-            Timer {
-                entry_time,
-                exit_time: None,
-                duration: None,
-            },
-        );
+            .context("Could not get entry NaiveDateTime from string")?;
+        let timer = Timer {
+            entry_time,
+            exit_time: None,
+            duration: None,
+        };
+        timers.insert(client_id, timer);
     }
 
-    let json = to_string_pretty(&timers)?;
-    write(timers_file, &json)?;
+    let json = to_string_pretty(&timers).context("Could not serialize Entry Timers data!")?;
+    write(timers_file, &json).context("Could not write Entry into Timers file!")?;
     Ok(())
 }
 
 pub fn add_exit_time() -> Result<(), anyhow::Error> {
-    let timers_file = timers_file_path()?;
-    let mut timers = read_timers(&timers_file)?;
+    let timers_file = timers_file_path().context("Could not get Timers file!")?;
+    let mut timers = read_timers(&timers_file).context("Could not read Timers file!")?;
 
     for timer in timers.values_mut() {
         if timer.exit_time.is_some() {
@@ -88,7 +88,7 @@ pub fn add_exit_time() -> Result<(), anyhow::Error> {
         timer.exit_time = Some(timer.entry_time + Duration::from_hours(rng_hours_for_simulation));
     }
 
-    let json = to_string_pretty(&timers)?;
-    write(timers_file, &json)?;
+    let json = to_string_pretty(&timers).context("Could not serialize Exit Timers data!")?;
+    write(timers_file, &json).context("Could not write Exit into Timers file!")?;
     Ok(())
 }
