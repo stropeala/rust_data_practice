@@ -1,10 +1,18 @@
 mod clients;
+mod data;
 mod organizers;
 mod timers;
 
-use clients::add_client;
+use dotenvy::dotenv;
 
-fn main() {
+use clients::add_client;
+use organizers::organizer;
+use timers::{add_entry_time, add_exit_time};
+
+fn main() -> Result<(), anyhow::Error> {
+    // Load environment once, up front, rather than on every file-path lookup.
+    dotenv().ok();
+
     let client_array = [
         ["Ionescu", "Ana", "0722000001", "Bucuresti"],
         ["Popescu", "Mihai", "0722000002", "Cluj-Napoca"],
@@ -59,6 +67,12 @@ fn main() {
     ];
 
     for client in client_array {
-        add_client(client[0], client[1], client[2], client[3]).expect("Failed to add new client!");
+        add_client(client[0], client[1], client[2], client[3]).expect("Could not add new client!");
     }
+
+    add_entry_time().expect("Could not add entry times!");
+    add_exit_time().expect("Could not add exit times!");
+    organizer().expect("Could not organize data!");
+
+    Ok(())
 }
