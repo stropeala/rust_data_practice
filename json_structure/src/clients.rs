@@ -17,7 +17,7 @@ pub struct Client {
     name: String,
     telephone_number: String,
     city: String,
-    pariah: bool,
+    pub pariah: bool,
 }
 
 impl Client {
