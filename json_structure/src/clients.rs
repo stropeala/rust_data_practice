@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 use std::env::var;
-use std::fs::{File, read_to_string, write};
+use std::fs::{DirBuilder, File, read_to_string, write};
 use std::path::{Path, PathBuf};
 
 use anyhow::Context;
@@ -33,8 +33,14 @@ impl Client {
 
 pub fn clients_file_path() -> Result<PathBuf, anyhow::Error> {
     dotenv().ok();
-    let data_dir = var("DATA_DIR_PATH").context("Could not get Data directory path from env!")?;
-    Ok(PathBuf::from(data_dir).join("clients.json"))
+    let data_dir =
+        PathBuf::from(var("DATA_DIR_PATH").context("Could not get Data directory path from env!")?);
+    if !data_dir.exists() {
+        DirBuilder::new()
+            .create(&data_dir)
+            .context("Could not create Data directory!")?;
+    }
+    Ok(data_dir.join("clients.json"))
 }
 
 pub fn read_clients(clients_file_path: &Path) -> Result<BTreeMap<usize, Client>, anyhow::Error> {

@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 use std::env::var;
-use std::fs::{File, read_to_string, write};
+use std::fs::{DirBuilder, File, read_to_string, write};
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
@@ -35,8 +35,14 @@ fn rng_datetime_for_simulation() -> (i32, i32, i32, i32, i32) {
 
 fn timers_file_path() -> Result<PathBuf, anyhow::Error> {
     dotenv().ok();
-    let data_dir = var("DATA_DIR_PATH").context("Could not get Data directory path from env!")?;
-    Ok(PathBuf::from(data_dir).join("timers.json"))
+    let data_dir =
+        PathBuf::from(var("DATA_DIR_PATH").context("Could not get Data directory path from env!")?);
+    if !data_dir.exists() {
+        DirBuilder::new()
+            .create(&data_dir)
+            .context("Could not create Data directory!")?;
+    }
+    Ok(data_dir.join("timers.json"))
 }
 
 fn read_timers(timers_file_path: &Path) -> Result<BTreeMap<usize, Timer>, anyhow::Error> {
@@ -83,7 +89,7 @@ pub fn add_exit_time() -> Result<(), anyhow::Error> {
         if timer.exit_time.is_some() {
             continue;
         }
-        let rng_hours_for_simulation = rng().random_range(1..73);
+        let rng_hours_for_simulation = rng().random_range(1..97);
         timer.duration = Some(format!("{rng_hours_for_simulation} hours"));
         timer.exit_time = Some(timer.entry_time + Duration::from_hours(rng_hours_for_simulation));
     }

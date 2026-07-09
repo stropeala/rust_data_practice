@@ -1,5 +1,5 @@
 mod clients;
-mod organizer;
+mod organizers;
 mod timers;
 
 use clients::add_client;
