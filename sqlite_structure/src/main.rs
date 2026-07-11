@@ -6,9 +6,10 @@ mod timers;
 use dotenvy::dotenv;
 
 use clients::{add_client, add_client_exit_time};
-use db::create_organizer_tables;
+use db::{create_organizer_tables, create_sqlite_pool};
 
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
     dotenv().ok();
 
     let client_array = [
@@ -64,10 +65,11 @@ fn main() -> anyhow::Result<()> {
         ["Vlad", "Horia", "0722000050", "Petrosani"],
     ];
 
+    let pool = create_sqlite_pool().await?;
     for client in client_array {
-        add_client(client[0], client[1], client[2], client[3])?;
-        add_client_exit_time(client[2])?;
+        add_client(&pool, client[0], client[1], client[2], client[3]).await?;
+        add_client_exit_time(&pool, client[2]).await?;
     }
-    create_organizer_tables()?;
+    create_organizer_tables(&pool).await?;
     Ok(())
 }

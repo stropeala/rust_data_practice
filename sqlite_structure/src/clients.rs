@@ -1,50 +1,52 @@
 use anyhow::Context;
+use sqlx::SqlitePool;
 
-use crate::db::{create_table, get_conn, get_entry_time_by_phone_nr, is_db};
+use crate::db::{create_table, get_entry_time_by_phone_nr, is_table};
 use crate::timers::{entry_timer, exit_timer};
 
-pub fn add_client(
+pub async fn add_client(
+    pool: &SqlitePool,
     surname: &str,
     name: &str,
     telephone_number: &str,
     city: &str,
 ) -> anyhow::Result<()> {
-    if !is_db()? {
-        create_table()?;
+    if !is_table(pool).await? {
+        create_table(pool).await?;
     }
 
     let entry_time = entry_timer()?;
-    let sql_insert_client = "INSERT INTO Clients
-    ('surname', 'name', 'telephone_number','city_of_residence',
-    'datetime_entrance', 'datetime_exit','hours_parked', 'pariah')
-    VALUES
-    (?, ?, ?, ?, ?, 'none', 0, 0)";
-
-    let conn = get_conn()?;
-    conn.execute(
-        sql_insert_client,
-        (
-            surname,
-            name,
-            telephone_number,
-            city,
-            entry_time.to_string(),
-        ),
-    )
-    .context("Failed adding client to table!")?;
+    let sql_query = "INSERT INTO Clients
+        (surname, name, telephone_number, city_of_residence,
+         datetime_entrance, datetime_exit, hours_parked, pariah)
+        VALUES
+        (?, ?, ?, ?, ?, NULL, 0, 0)";
+    sqlx::query(sql_query)
+        .bind(surname)
+        .bind(name)
+        .bind(telephone_number)
+        .bind(city)
+        .bind(entry_time.to_string())
+        .execute(pool)
+        .await
+        .context("Failed adding client to table!")?;
     Ok(())
 }
 
-pub fn add_client_exit_time(client_phone_nr: &str) -> anyhow::Result<()> {
-    let entry_time = get_entry_time_by_phone_nr(client_phone_nr)?;
+pub async fn add_client_exit_time(pool: &SqlitePool, client_phone_nr: &str) -> anyhow::Result<()> {
+    let entry_time = get_entry_time_by_phone_nr(pool, client_phone_nr).await?;
     let exit_time = exit_timer(entry_time)?;
     let duration = (exit_time - entry_time).num_hours();
     let pariah = duration > 72;
-    let conn = get_conn()?;
-    conn.execute(
-        "UPDATE Clients SET datetime_exit=?, hours_parked=?, pariah=? WHERE telephone_number=?",
-        (exit_time.to_string(), duration, pariah, client_phone_nr),
-    )
-    .context("Failed adding exit time!")?;
+
+    let sql_query = "UPDATE Clients SET datetime_exit = ?, hours_parked = ?, pariah = ? WHERE telephone_number = ?";
+    sqlx::query(sql_query)
+        .bind(exit_time.to_string())
+        .bind(duration)
+        .bind(pariah)
+        .bind(client_phone_nr)
+        .execute(pool)
+        .await
+        .context("Failed adding exit time!")?;
     Ok(())
 }
