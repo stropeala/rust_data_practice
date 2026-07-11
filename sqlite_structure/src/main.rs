@@ -1,10 +1,12 @@
 mod clients;
 mod data;
 mod db;
+mod timers;
 
 use dotenvy::dotenv;
 
-use clients::add_client;
+use clients::{add_client, add_client_exit_time};
+use db::create_organizer_tables;
 
 fn main() -> anyhow::Result<()> {
     dotenv().ok();
@@ -64,7 +66,8 @@ fn main() -> anyhow::Result<()> {
 
     for client in client_array {
         add_client(client[0], client[1], client[2], client[3])?;
+        add_client_exit_time(client[2])?;
     }
-
+    create_organizer_tables()?;
     Ok(())
 }

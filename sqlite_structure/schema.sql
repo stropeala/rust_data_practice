@@ -6,7 +6,7 @@ CREATE TABLE "Clients" (
 "city_of_residence"	TEXT,
 "datetime_entrance"	TEXT,
 "datetime_exit"	TEXT,
-"hours_Parked" TEXT,
+"hours_parked" INTEGER,
 "pariah"	TEXT,
 PRIMARY KEY("ID" AUTOINCREMENT)
 ) STRICT;
