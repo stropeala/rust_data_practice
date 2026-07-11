@@ -22,6 +22,6 @@ pub fn get_data(file_path: &Path) -> anyhow::Result<String> {
     let mut content = String::new();
 
     file.read_to_string(&mut content)
-        .with_context(|| format!("Failed reading {file:?}!"))?;
+        .with_context(|| format!("Failed reading {file_path:?}!"))?;
     Ok(content)
 }

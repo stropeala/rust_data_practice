@@ -8,8 +8,10 @@ use rusqlite::Connection;
 use crate::data::{data_file, get_data};
 use crate::timers::DATETIME_FORMAT;
 
+const DB_NAME: &str = "parkinglot.db";
+
 pub fn get_conn() -> anyhow::Result<Connection> {
-    let db = data_file("parkinglot.db")?;
+    let db = data_file(DB_NAME)?;
     let conn = Connection::open(&db).context("Failed connecting to DB!")?;
     Ok(conn)
 }
@@ -28,7 +30,7 @@ pub fn create_table() -> anyhow::Result<()> {
 }
 
 pub fn is_db() -> anyhow::Result<bool> {
-    let db = data_file("parkinglot.db")?;
+    let db = data_file(DB_NAME)?;
     Ok(db.exists())
 }
 
@@ -45,13 +47,20 @@ pub fn get_entry_time_by_phone_nr(client_phone_nr: &str) -> anyhow::Result<Naive
 
 pub fn create_organizer_tables() -> anyhow::Result<()> {
     let conn = get_conn()?;
-    let sql_queries = [
-        "CREATE TABLE under_2_hours AS SELECT * FROM Clients WHERE hours_parked <= 2;",
-        "CREATE TABLE over_2_hours AS SELECT * FROM Clients WHERE hours_parked > 2 AND hours_Parked <= 72;",
-        "CREATE TABLE over_3_days AS SELECT * FROM Clients WHERE hours_parked > 72;",
+    let table_names = ["under_2_hours", "over_2_hours", "over_3_days"];
+    let table_conditions = [
+        "hours_parked <= 2",
+        "hours_parked > 2 AND hours_Parked <= 72",
+        "hours_parked > 72",
     ];
-    for query in sql_queries {
-        conn.execute(query, ()).context("Failed organizing data!")?;
+
+    for (name, condition) in table_names.iter().zip(table_conditions) {
+        conn.execute(
+            &format!(
+                "CREATE VIEW IF NOT EXISTS {name} AS SELECT * FROM Clients WHERE {condition};"
+            ),
+            (),
+        )?;
     }
     Ok(())
 }
